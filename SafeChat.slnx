@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="SafeChat.API/SafeChat.API.csproj" />
+    <Project Path="SafeChat.Application/SafeChat.Application.csproj" />
+    <Project Path="SafeChat.Domain/SafeChat.Domain.csproj" />
+    <Project Path="SafeChat.Infrastructure/SafeChat.Infrastructure.csproj" />
+    <Project Path="SafeChat.Mobile/SafeChat.Mobile.csproj" />
+  </Folder>
+</Solution>
