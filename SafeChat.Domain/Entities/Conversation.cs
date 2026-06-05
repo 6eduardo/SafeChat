@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SafeChat.Domain.Entities
 {
@@ -12,7 +10,7 @@ namespace SafeChat.Domain.Entities
         public DateTime? LastMessageAt { get; set; }
 
         // Navigation Properties
-        public ICollection Participants { get; set; } = [];
-        public ICollection Messages { get; set; } = [];
+        public ICollection<ConversationParticipant> Participants { get; set; } = new List<ConversationParticipant>();
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SafeChat.Domain.Entities
 {
@@ -14,10 +12,10 @@ namespace SafeChat.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsOnline { get; set; } = false;
         public DateTime? LastSeenAt { get; set; }
-        
+
         // Navigation Properties
         public PublicKey? PublicKey { get; set; }
-        public ICollection ConversationParticipants { get; set; } = [];
-        public ICollection SentMessages { get; set; } = [];
+        public ICollection<ConversationParticipant> ConversationParticipants { get; set; } = new List<ConversationParticipant>();
+        public ICollection<Message> SentMessages { get; set; } = new List<Message>();
     }
 }
