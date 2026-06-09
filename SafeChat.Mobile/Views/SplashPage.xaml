@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SafeChat.Mobile.Views.SplashPage"
+             Title="SplashPage"
+             BackgroundColor="#0D1B3E">
+
+    <Grid RowDefinitions="*, Auto">
+
+        <!-- Conteúdo central -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="0"
+            Padding="32,0">
+
+            <!-- Ícone / Logo placeholder -->
+            <Border
+                WidthRequest="90"
+                HeightRequest="90"
+                HorizontalOptions="Center"
+                BackgroundColor="#1A2F5E"
+                StrokeThickness="0"
+                Margin="0,0,0,28">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20"/>
+                </Border.StrokeShape>
+                <!-- Substitua pelo seu ícone real -->
+                <Image
+                    Source="app_icon.png"
+                    WidthRequest="52"
+                    HeightRequest="52"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"/>
+            </Border>
+
+            <!-- Título -->
+            <Label
+                Text="SafeChat"
+                FontSize="32"
+                FontAttributes="Bold"
+                TextColor="White"
+                HorizontalOptions="Center"
+                Margin="0,0,0,6"/>
+
+            <!-- Subtítulo -->
+            <Label
+                Text="Mensagens privadas e seguras"
+                FontSize="14"
+                TextColor="#8A9BC8"
+                HorizontalOptions="Center"
+                Margin="0,0,0,36"/>
+
+            <!-- Feature badges -->
+            <Border
+                HorizontalOptions="Center"
+                BackgroundColor="Transparent"
+                StrokeThickness="1"
+                Stroke="#2A3F70"
+                Padding="20,10"
+                Margin="0,0,0,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24"/>
+                </Border.StrokeShape>
+                <Label
+                    Text="Encriptação ponta-a-ponta AES-256 + RSA-2048"
+                    FontSize="13"
+                    TextColor="#C8D4F0"
+                    HorizontalOptions="Center"/>
+            </Border>
+
+            <Border
+                HorizontalOptions="Center"
+                BackgroundColor="Transparent"
+                StrokeThickness="1"
+                Stroke="#2A3F70"
+                Padding="20,10"
+                Margin="0,0,0,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24"/>
+                </Border.StrokeShape>
+                <Label
+                    Text="O servidor nunca lê as suas mensagens"
+                    FontSize="13"
+                    TextColor="#C8D4F0"
+                    HorizontalOptions="Center"/>
+            </Border>
+
+            <Border
+                HorizontalOptions="Center"
+                BackgroundColor="Transparent"
+                StrokeThickness="1"
+                Stroke="#2A3F70"
+                Padding="20,10"
+                Margin="0,0,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24"/>
+                </Border.StrokeShape>
+                <Label
+                    Text="Chaves privadas apenas no seu dispositivo"
+                    FontSize="13"
+                    TextColor="#C8D4F0"
+                    HorizontalOptions="Center"/>
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!-- Botões na parte inferior -->
+        <VerticalStackLayout
+            Grid.Row="1"
+            Spacing="12"
+            Padding="32,0,32,48">
+
+            <!-- Botão primário: Criar conta -->
+            <Button
+                Text="Criar conta"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="White"
+                BackgroundColor="#2563EB"
+                CornerRadius="14"
+                HeightRequest="54"
+                HorizontalOptions="Fill"
+                Clicked="OnCriarContaClicked"/>
+
+            <!-- Botão secundário: Já tenho conta -->
+            <Border
+                HorizontalOptions="Fill"
+                BackgroundColor="Transparent"
+                StrokeThickness="1.5"
+                Stroke="#2A3F70"
+                HeightRequest="54">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14"/>
+                </Border.StrokeShape>
+                <Button
+                    Text="Já tenho conta"
+                    FontSize="16"
+                    TextColor="#C8D4F0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    Clicked="OnJaTenhoContaClicked"/>
+            </Border>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>
