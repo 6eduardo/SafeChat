@@ -9,13 +9,11 @@ public partial class SplashPage : ContentPage
 
     private async void OnCriarContaClicked(object sender, EventArgs e)
     {
-        // Navegar para a página de registo
-        // await Shell.Current.GoToAsync(nameof(RegisterPage));
+        await Shell.Current.GoToAsync("RegisterPage");
     }
 
     private async void OnJaTenhoContaClicked(object sender, EventArgs e)
     {
-        // Navegar para a página de login
-        // await Shell.Current.GoToAsync(nameof(LoginPage));
+        await Shell.Current.GoToAsync("Login");
     }
 }

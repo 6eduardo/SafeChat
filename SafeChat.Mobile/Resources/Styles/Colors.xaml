@@ -27,6 +27,23 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <!-- SafeChat brand -->
+    <Color x:Key="SafeChatNavy">#0D3158</Color>
+    <Color x:Key="SafeChatNavyLight">#1A4A7A</Color>
+    <Color x:Key="SafeChatLink">#2B6CB0</Color>
+    <Color x:Key="SafeChatInputBg">#F0F4F8</Color>
+    <Color x:Key="SafeChatInputBorder">#C5D3E3</Color>
+    <Color x:Key="SafeChatBadgeBg">#EBF2FA</Color>
+    <Color x:Key="SafeChatTextDark">#333333</Color>
+    <Color x:Key="SafeChatTextMuted">#6B7280</Color>
+    <Color x:Key="SafeChatSectionLabel">#9CA3AF</Color>
+    <Color x:Key="SafeChatSuccessGreen">#4CAF50</Color>
+    <Color x:Key="SafeChatSuccessBg">#E8F5E9</Color>
+    <Color x:Key="SafeChatSuccessText">#2E7D32</Color>
+    <Color x:Key="SafeChatInfoBg">#E8F0FE</Color>
+    <Color x:Key="SafeChatStrengthInactive">#E5E7EB</Color>
+    <Color x:Key="SafeChatProgressInactive">#4A6B8A</Color>
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

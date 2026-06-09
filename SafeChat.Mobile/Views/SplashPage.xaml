@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SafeChat.Mobile.Views.SplashPage"
-             Title="SplashPage"
+             NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0D1B3E">
 
     <Grid RowDefinitions="*, Auto">
@@ -28,7 +28,7 @@
                 </Border.StrokeShape>
                 <!-- Substitua pelo seu ícone real -->
                 <Image
-                    Source="app_icon.png"
+                    Source="padlock.png"
                     WidthRequest="52"
                     HeightRequest="52"
                     HorizontalOptions="Center"

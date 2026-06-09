@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SafeChat.Mobile.ViewModels"
+             x:Class="SafeChat.Mobile.Views.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource SafeChatNavy}">
+
+    <Grid RowDefinitions="2*,3*">
+
+        <!-- Cabeçalho -->
+        <Grid Grid.Row="0" BackgroundColor="{StaticResource SafeChatNavy}">
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Spacing="10"
+                Padding="32,0">
+
+                <Border
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource SafeChatNavyLight}"
+                    StrokeThickness="0"
+                    Margin="0,0,0,4">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <Image
+                        Source="padlock.png"
+                        WidthRequest="44"
+                        HeightRequest="44"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"/>
+                </Border>
+
+                <Label
+                    Text="SafeChat"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    FontFamily="OpenSansSemibold"
+                    TextColor="White"
+                    HorizontalOptions="Center"/>
+
+                <Label
+                    Text="Mensagens seguras e privadas"
+                    FontSize="14"
+                    TextColor="White"
+                    Opacity="0.9"
+                    HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Formulário -->
+        <Grid Grid.Row="1" BackgroundColor="White">
+            <ScrollView>
+                <VerticalStackLayout
+                    Padding="28,32,28,24"
+                    Spacing="0">
+
+                    <!-- E-mail -->
+                    <Label
+                        Text="E-mail"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource SafeChatTextDark}"
+                        Margin="0,0,0,8"/>
+
+                    <Border
+                        BackgroundColor="{StaticResource SafeChatInputBg}"
+                        Stroke="{StaticResource SafeChatInputBorder}"
+                        StrokeThickness="1"
+                        Padding="14,0"
+                        HeightRequest="50"
+                        Margin="0,0,0,20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Entry
+                            Text="{Binding Email}"
+                            Placeholder="utilizador@email.com"
+                            PlaceholderColor="{StaticResource SafeChatTextMuted}"
+                            TextColor="{StaticResource SafeChatTextDark}"
+                            BackgroundColor="Transparent"
+                            Keyboard="Email"
+                            FontSize="15"/>
+                    </Border>
+
+                    <!-- Palavra-passe -->
+                    <Label
+                        Text="Palavra-passe"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource SafeChatTextDark}"
+                        Margin="0,0,0,8"/>
+
+                    <Border
+                        BackgroundColor="{StaticResource SafeChatInputBg}"
+                        Stroke="{StaticResource SafeChatInputBorder}"
+                        StrokeThickness="1"
+                        Padding="14,0"
+                        HeightRequest="50"
+                        Margin="0,0,0,28">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Entry
+                            Text="{Binding Password}"
+                            Placeholder="••••••••"
+                            PlaceholderColor="{StaticResource SafeChatTextMuted}"
+                            TextColor="{StaticResource SafeChatTextDark}"
+                            BackgroundColor="Transparent"
+                            IsPassword="True"
+                            FontSize="15"/>
+                    </Border>
+
+                    <!-- Botão Entrar -->
+                    <Button
+                        Text="Entrar"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource SafeChatNavy}"
+                        CornerRadius="10"
+                        HeightRequest="52"
+                        HorizontalOptions="Fill"
+                        Margin="0,0,0,20"
+                        Command="{Binding LoginCommand}"/>
+
+                    <ActivityIndicator
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        Color="{StaticResource SafeChatNavy}"
+                        HorizontalOptions="Center"
+                        Margin="0,0,0,16"/>
+
+                    <!-- Link de registo -->
+                    <Label
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        FontSize="14"
+                        Margin="0,0,0,32">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Ainda não tens conta? " TextColor="{StaticResource SafeChatTextDark}"/>
+                                <Span Text="Regista-te" TextColor="{StaticResource SafeChatLink}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <!-- Badge de segurança -->
+                    <Border
+                        BackgroundColor="{StaticResource SafeChatBadgeBg}"
+                        StrokeThickness="0"
+                        Padding="16,12"
+                        HorizontalOptions="Fill">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                        <Label
+                            Text="Ligação encriptada com TLS + E2EE"
+                            FontSize="13"
+                            TextColor="{StaticResource SafeChatNavy}"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"/>
+                    </Border>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

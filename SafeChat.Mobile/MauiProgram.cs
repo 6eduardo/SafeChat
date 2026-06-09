@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using SafeChat.Mobile.ViewModels;
+using SafeChat.Mobile.Views;
 
 namespace SafeChat.Mobile
 {
@@ -14,6 +16,11 @@ namespace SafeChat.Mobile
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<RegisterPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
