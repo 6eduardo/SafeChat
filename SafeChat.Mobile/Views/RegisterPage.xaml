@@ -119,38 +119,6 @@
                     <Entry Text="{Binding ConfirmPassword}" Placeholder="••••••••" PlaceholderColor="{StaticResource SafeChatTextMuted}" TextColor="{StaticResource SafeChatTextDark}" BackgroundColor="Transparent" IsPassword="True" FontSize="15"/>
                 </Border>
 
-                <!-- CHAVES DE ENCRIPTAÇÃO -->
-                <Label
-                    Text="CHAVES DE ENCRIPTAÇÃO"
-                    FontSize="11"
-                    FontAttributes="Bold"
-                    TextColor="{StaticResource SafeChatSectionLabel}"
-                    CharacterSpacing="1"
-                    Margin="0,0,0,16"/>
-
-                <Border BackgroundColor="{StaticResource SafeChatInfoBg}" StrokeThickness="0" Padding="14" Margin="0,0,0,12">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="10"/></Border.StrokeShape>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                        <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="{StaticResource SafeChatNavy}" StrokeThickness="0" VerticalOptions="Center">
-                            <Border.StrokeShape><RoundRectangle CornerRadius="8"/></Border.StrokeShape>
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                            <Label Text="Par RSA-2048 gerado" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource SafeChatNavy}"/>
-                            <Label Text="Chave privada guardada localmente" FontSize="12" TextColor="{StaticResource SafeChatLink}"/>
-                        </VerticalStackLayout>
-                    </Grid>
-                </Border>
-
-                <Border BackgroundColor="{StaticResource SafeChatSuccessBg}" StrokeThickness="0" Padding="14" Margin="0,0,0,16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="10"/></Border.StrokeShape>
-                    <Label Text="Android Keystore – protecção de hardware activa" FontSize="13" TextColor="{StaticResource SafeChatSuccessText}" HorizontalTextAlignment="Center"/>
-                </Border>
-
-                <Label Text="Chave pública (enviada ao servidor)" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource SafeChatTextDark}" Margin="0,0,0,8"/>
-                <Border BackgroundColor="{StaticResource SafeChatInputBg}" Stroke="{StaticResource SafeChatInputBorder}" StrokeThickness="1" Padding="14,12" Margin="0,0,0,28">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="10"/></Border.StrokeShape>
-                    <Label Text="{Binding PublicKeyPreview}" FontSize="11" TextColor="{StaticResource SafeChatTextMuted}" LineBreakMode="CharacterWrap"/>
-                </Border>
 
                 <!-- Termos -->
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,24">
@@ -168,7 +136,7 @@
                 </Grid>
 
                 <Button
-                    Text="Criar conta e gerar chaves"
+                    Text="Criar conta"
                     FontSize="16"
                     FontAttributes="Bold"
                     TextColor="White"

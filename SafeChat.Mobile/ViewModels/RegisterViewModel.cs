@@ -77,7 +77,7 @@ public partial class RegisterViewModel : ObservableObject
             // TODO: chamar API de registo e gerar par RSA
             await Task.Delay(1500);
             await Shell.Current.DisplayAlertAsync("Sucesso", "Conta criada com sucesso!", "OK");
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("MainPage");
         }
         finally
         {
@@ -88,7 +88,7 @@ public partial class RegisterViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToLoginAsync()
     {
-        await Shell.Current.GoToAsync("..");
+        await Shell.Current.GoToAsync("LoginPage");
     }
 
     private async Task<bool> ValidateFormAsync()

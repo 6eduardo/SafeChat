@@ -10,4 +10,8 @@
 
     <ShellContent Route="Splash" ContentTemplate="{DataTemplate views:SplashPage}" />
 
+    <TabBar>
+        <ShellContent Route="Inicio" ContentTemplate="{DataTemplate views:MainPage}"/>
+    </TabBar>
+
 </Shell>
