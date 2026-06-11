@@ -31,7 +31,7 @@ namespace SafeChat.Mobile.ViewModels
                 await Task.Delay(1500); // simulação
 
                 // Navegar para a página principal após login
-                await Shell.Current.GoToAsync("//MainPage");
+                await Shell.Current.GoToAsync("//Inicio");
             }
             finally
             {

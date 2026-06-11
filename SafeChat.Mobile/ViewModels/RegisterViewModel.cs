@@ -88,7 +88,7 @@ public partial class RegisterViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToLoginAsync()
     {
-        await Shell.Current.GoToAsync("LoginPage");
+        await Shell.Current.GoToAsync("Login");
     }
 
     private async Task<bool> ValidateFormAsync()
