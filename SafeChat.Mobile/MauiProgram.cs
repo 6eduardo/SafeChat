@@ -3,6 +3,8 @@ using SafeChat.Mobile.Configuration;
 using SafeChat.Mobile.Services.Api;
 using SafeChat.Mobile.Services.Auth;
 using SafeChat.Mobile.Services.Crypto;
+using SafeChat.Mobile.Services.Interfaces;
+using SafeChat.Mobile.Services.Mock;
 using SafeChat.Mobile.Services.Navigation;
 using SafeChat.Mobile.Services.RealTime;
 using SafeChat.Mobile.Services.Storage;
@@ -45,6 +47,7 @@ namespace SafeChat.Mobile
 
             // Autenticação e tokens
             services.AddSingleton<TokenService>();
+            services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
 
             // Armazenamento seguro
             services.AddSingleton<SecureKeyStorageService>();
@@ -54,11 +57,11 @@ namespace SafeChat.Mobile
             services.AddSingleton<AesEncryptionService>();
             services.AddSingleton<MessageEncryptionService>();
 
-            // Comunicação REST
-            services.AddHttpClient<AuthenticationService>();
-            services.AddHttpClient<ConversationService>();
-            services.AddHttpClient<ChatService>();
-            services.AddHttpClient<ContactService>();
+            // Comunicação REST (comentado — usar quando a API real estiver pronta)
+            // services.AddHttpClient<AuthenticationService>();
+            // services.AddHttpClient<ConversationService>();
+            // services.AddHttpClient<ChatService>();
+            // services.AddHttpClient<ContactService>();
 
             // Tempo real
             services.AddSingleton<SignalRService>();

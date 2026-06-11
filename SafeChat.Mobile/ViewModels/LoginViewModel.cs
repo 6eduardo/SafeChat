@@ -1,10 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SafeChat.Mobile.DTO.Auth;
+using SafeChat.Mobile.Services.Interfaces;
 
 namespace SafeChat.Mobile.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
+        private readonly IAuthenticationService _authService;
+
         [ObservableProperty]
         private string _email = string.Empty;
 
@@ -13,6 +17,11 @@ namespace SafeChat.Mobile.ViewModels
 
         [ObservableProperty]
         private bool _isLoading;
+
+        public LoginViewModel(IAuthenticationService authService)
+        {
+            _authService = authService;
+        }
 
         [RelayCommand]
         private async Task LoginAsync()
@@ -27,11 +36,23 @@ namespace SafeChat.Mobile.ViewModels
 
             try
             {
-                // TODO: chamar o teu serviço de autenticação aqui
-                await Task.Delay(1500); // simulação
+                var request = new LoginRequestDto
+                {
+                    EmailOrUsername = Email,
+                    Password = Password
+                };
 
-                // Navegar para a página principal após login
+                await _authService.LoginAsync(request);
+
                 await Shell.Current.GoToAsync("//Inicio");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Erro", ex.Message, "OK");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "OK");
             }
             finally
             {

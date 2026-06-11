@@ -1,10 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SafeChat.Mobile.DTO.Auth;
+using SafeChat.Mobile.Services.Interfaces;
 
 namespace SafeChat.Mobile.ViewModels;
 
 public partial class RegisterViewModel : ObservableObject
 {
+    private readonly IAuthenticationService _authService;
+
     private static readonly Color StrengthActive = Color.FromArgb("#4CAF50");
     private static readonly Color StrengthInactive = Color.FromArgb("#E5E7EB");
 
@@ -35,9 +39,6 @@ public partial class RegisterViewModel : ObservableObject
     [ObservableProperty]
     private int _passwordStrength;
 
-    public string PublicKeyPreview { get; } =
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7xK9mN2pL4vR8wH3jF6sT1uY0zA5bC9dE2gI7kM4nO6qP3rS8tU1vW4xY7zA0bD3eF6gH9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2gH5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8gH1jK4lM7nO0pQ3rS6tU9vW2xY5zA8bC1dE4gH7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0gH3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6gH9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2gH5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8gH1jK4lM7nO0pQ3rS6tU9vW2xY5zA8bC1dE4gH7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0gH3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6gH9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2gH5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8gH1jK4lM7nO0pQ3rS6tU9vW2xY5zA8bC1dE4gH7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0gH3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6gH9jK2lM5nO8pQ1rS4tU7vW0xY3zA6bC9dE2gH5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8gH1jK4lM7nO0pQ3rS6tU9vW2xY5zA8bC1dE4gH7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7dE0gH3jK6lM9nO2pQ5rS8tU1vW4xY7zA0bC3dE6gH9jK2lM5nO8pQIDAQAB";
-
     public bool ShowPasswordStrength => !string.IsNullOrEmpty(Password);
 
     public string PasswordStrengthText => PasswordStrength switch
@@ -58,6 +59,11 @@ public partial class RegisterViewModel : ObservableObject
     public Color Bar3Color => PasswordStrength >= 3 ? StrengthActive : StrengthInactive;
     public Color Bar4Color => PasswordStrength >= 4 ? StrengthActive : StrengthInactive;
 
+    public RegisterViewModel(IAuthenticationService authService)
+    {
+        _authService = authService;
+    }
+
     partial void OnPasswordChanged(string value)
     {
         PasswordStrength = CalculateStrength(value);
@@ -74,10 +80,25 @@ public partial class RegisterViewModel : ObservableObject
 
         try
         {
-            // TODO: chamar API de registo e gerar par RSA
-            await Task.Delay(1500);
+            var request = new RegisterRequestDto
+            {
+                Username = Username,
+                Email = Email,
+                Password = Password
+            };
+
+            await _authService.RegisterAsync(request);
+
             await Shell.Current.DisplayAlertAsync("Sucesso", "Conta criada com sucesso!", "OK");
-            await Shell.Current.GoToAsync("MainPage");
+            await Shell.Current.GoToAsync("//Inicio");
+        }
+        catch (InvalidOperationException ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Erro", ex.Message, "OK");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Erro", $"Ocorreu um erro inesperado: {ex.Message}", "OK");
         }
         finally
         {
