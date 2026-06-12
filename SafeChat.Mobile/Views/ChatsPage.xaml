@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SafeChat.Mobile.Views.ChatsPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White"
+             Title="Chats">
+
+    <VerticalStackLayout VerticalOptions="Center"
+                         HorizontalOptions="Center"
+                         Spacing="8"
+                         Padding="24">
+        <Label Text="Chats"
+               FontSize="22"
+               FontAttributes="Bold"
+               FontFamily="OpenSansSemibold"
+               TextColor="{StaticResource SafeChatNavy}"
+               HorizontalOptions="Center" />
+        <Label Text="Em breve"
+               FontSize="14"
+               TextColor="{StaticResource SafeChatTextMuted}"
+               HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+</ContentPage>

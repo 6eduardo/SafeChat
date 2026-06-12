@@ -10,6 +10,7 @@ namespace SafeChat.Mobile
 
             Routing.RegisterRoute("Login", typeof(LoginPage));
             Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
+            Routing.RegisterRoute("Chat", typeof(ChatPage));
         }
     }
 }

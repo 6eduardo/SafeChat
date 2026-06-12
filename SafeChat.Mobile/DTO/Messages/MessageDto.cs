@@ -15,6 +15,9 @@ public class MessageDto
     /// <summary>Identificador do remetente.</summary>
     public int SenderId { get; set; }
 
+    /// <summary>Nome de utilizador do remetente.</summary>
+    public string SenderUsername { get; set; } = string.Empty;
+
     /// <summary>Data/hora UTC de envio.</summary>
     public DateTime SentAt { get; set; }
 

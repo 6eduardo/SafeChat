@@ -4,6 +4,8 @@ namespace SafeChat.Mobile.Services.Auth;
 
 public class TokenService
 {
+    public event Action? SessionCleared;
+
     private UserSession? _session;
 
     private static readonly string TokenKey = "auth_token";
@@ -37,6 +39,7 @@ public class TokenService
         Preferences.Remove(UsernameKey);
         Preferences.Remove(EmailKey);
         Preferences.Remove(ExpiresAtKey);
+        SessionCleared?.Invoke();
     }
 
     public bool IsAuthenticated

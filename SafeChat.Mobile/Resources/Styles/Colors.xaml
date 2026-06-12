@@ -43,6 +43,12 @@
     <Color x:Key="SafeChatInfoBg">#E8F0FE</Color>
     <Color x:Key="SafeChatStrengthInactive">#E5E7EB</Color>
     <Color x:Key="SafeChatProgressInactive">#4A6B8A</Color>
+    <Color x:Key="SafeChatConversationsSelectedBg">#E8F0FE</Color>
+    <Color x:Key="SafeChatDivider">#E5E7EB</Color>
+    <Color x:Key="SafeChatChatBg">#F3F4F6</Color>
+    <Color x:Key="SafeChatPresenceText">#4DB6AC</Color>
+    <Color x:Key="SafeChatDangerText">#DC2626</Color>
+    <Color x:Key="SafeChatDangerBorder">#FECACA</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>

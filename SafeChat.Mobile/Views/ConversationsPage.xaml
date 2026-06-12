@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SafeChat.Mobile.ViewModels"
+             xmlns:model="clr-namespace:SafeChat.Mobile.Model"
+             xmlns:converters="clr-namespace:SafeChat.Mobile.Converters"
+             x:Class="SafeChat.Mobile.Views.ConversationsPage"
+             x:Name="ConversationsPageRoot"
+             x:DataType="vm:ConversationsViewModel"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
+
+    <ContentPage.Resources>
+        <converters:IntGreaterThanZeroConverter x:Key="IntGreaterThanZeroConverter" />
+        <converters:SelectedItemBackgroundConverter x:Key="SelectedItemBackgroundConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Cabeçalho -->
+        <Grid Grid.Row="0"
+              BackgroundColor="{StaticResource SafeChatNavy}"
+              Padding="20,16"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="14">
+            <Border WidthRequest="44"
+                    HeightRequest="44"
+                    BackgroundColor="{StaticResource SafeChatNavyLight}"
+                    StrokeThickness="0"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+                <Label Text="{Binding UserInitials}"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       FontFamily="OpenSansSemibold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Conversas"
+                   FontSize="26"
+                   FontFamily="OpenSansSemibold"
+                   TextColor="White"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Pesquisa -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource SafeChatInputBg}"
+                StrokeThickness="0"
+                Padding="20,12">
+            <Border BackgroundColor="White"
+                    Stroke="{StaticResource SafeChatInputBorder}"
+                    StrokeThickness="1"
+                    Padding="14,0"
+                    HeightRequest="44">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+                <Entry Text="{Binding SearchText}"
+                       Placeholder="Pesquisar..."
+                       PlaceholderColor="{StaticResource SafeChatTextMuted}"
+                       TextColor="{StaticResource SafeChatTextDark}"
+                       BackgroundColor="Transparent"
+                       FontSize="15"
+                       VerticalOptions="Center" />
+            </Border>
+        </Border>
+
+        <!-- Lista de conversas -->
+        <Grid Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Conversations}"
+                            SelectedItem="{Binding SelectedConversation, Mode=TwoWay}"
+                            SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="0" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:ConversationListItem">
+                        <Grid Padding="16,14"
+                              ColumnDefinitions="Auto,*,Auto"
+                              ColumnSpacing="14"
+                              BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedItemBackgroundConverter}}">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference ConversationsPageRoot}, Path=BindingContext.OpenConversationCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+
+                            <!-- Avatar + indicador online -->
+                            <Grid WidthRequest="50"
+                                  HeightRequest="50"
+                                  VerticalOptions="Center">
+                                <Border WidthRequest="46"
+                                        HeightRequest="46"
+                                        BackgroundColor="{StaticResource SafeChatNavy}"
+                                        StrokeThickness="0"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Start">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="23" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding Initials}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           FontFamily="OpenSansSemibold"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+
+                                <Ellipse WidthRequest="12"
+                                         HeightRequest="12"
+                                         Fill="{StaticResource SafeChatSuccessGreen}"
+                                         HorizontalOptions="End"
+                                         VerticalOptions="End"
+                                         IsVisible="{Binding IsOnline}" />
+                            </Grid>
+
+                            <!-- Nome e pré-visualização -->
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <Label Text="{Binding DisplayName}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       FontFamily="OpenSansSemibold"
+                                       TextColor="{StaticResource SafeChatTextDark}"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding LastMessagePreview}"
+                                       FontSize="14"
+                                       TextColor="{StaticResource SafeChatTextMuted}"
+                                       LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+
+                            <!-- Hora e badge -->
+                            <VerticalStackLayout Grid.Column="2"
+                                                 Spacing="6"
+                                                 VerticalOptions="Center"
+                                                 HorizontalOptions="End">
+                                <Label Text="{Binding TimestampDisplay}"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SafeChatTextMuted}"
+                                       HorizontalOptions="End" />
+
+                                <Border BackgroundColor="{StaticResource SafeChatNavy}"
+                                        WidthRequest="22"
+                                        HeightRequest="22"
+                                        StrokeThickness="0"
+                                        HorizontalOptions="End"
+                                        IsVisible="{Binding UnreadCount, Converter={StaticResource IntGreaterThanZeroConverter}}">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="11" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding UnreadCount}"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="Center" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <BoxView Grid.ColumnSpan="3"
+                                     HeightRequest="1"
+                                     Color="{StaticResource SafeChatDivider}"
+                                     VerticalOptions="End"
+                                     Margin="0,14,0,-14" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource SafeChatNavy}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

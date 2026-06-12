@@ -14,6 +14,13 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+    }
+
     public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         return _context.Users

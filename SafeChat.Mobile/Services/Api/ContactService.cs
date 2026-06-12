@@ -1,3 +1,6 @@
+using SafeChat.Mobile.Configuration;
+using SafeChat.Mobile.Services.Auth;
+
 namespace SafeChat.Mobile.Services.Api;
 
 /// <summary>
@@ -6,4 +9,8 @@ namespace SafeChat.Mobile.Services.Api;
 /// </summary>
 public class ContactService : BaseApiService
 {
+    public ContactService(HttpClient httpClient, ApiConfiguration configuration, TokenService tokenService)
+        : base(httpClient, configuration, tokenService)
+    {
+    }
 }

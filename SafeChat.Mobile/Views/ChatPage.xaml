@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SafeChat.Mobile.ViewModels"
+             xmlns:model="clr-namespace:SafeChat.Mobile.Model"
+             xmlns:selectors="clr-namespace:SafeChat.Mobile.Selectors"
+             xmlns:converters="clr-namespace:SafeChat.Mobile.Converters"
+             x:Class="SafeChat.Mobile.Views.ChatPage"
+             x:DataType="vm:ChatViewModel"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource SafeChatChatBg}">
+
+    <ContentPage.Resources>
+        <converters:OnlinePresenceColorConverter x:Key="OnlinePresenceColorConverter" />
+        <selectors:ChatMessageTemplateSelector x:Key="ChatMessageTemplateSelector"
+                                               x:Name="MessageTemplateSelector">
+
+            <!-- Mensagem recebida -->
+            <selectors:ChatMessageTemplateSelector.IncomingTemplate>
+                <DataTemplate x:DataType="model:ChatMessage">
+                    <Grid Padding="12,4" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                        <Border WidthRequest="34"
+                                HeightRequest="34"
+                                BackgroundColor="{StaticResource SafeChatNavy}"
+                                StrokeThickness="0"
+                                VerticalOptions="End"
+                                Margin="0,0,0,4">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="17" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding SenderInitials}"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                BackgroundColor="White"
+                                StrokeThickness="0"
+                                Padding="14,10"
+                                MaximumWidthRequest="280"
+                                HorizontalOptions="Start"
+                                VerticalOptions="End"
+                                Margin="0,0,48,4">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Content}"
+                                       FontSize="15"
+                                       TextColor="{StaticResource SafeChatTextDark}"
+                                       LineBreakMode="WordWrap" />
+                                <Label Text="{Binding TimestampDisplay}"
+                                       FontSize="11"
+                                       TextColor="{StaticResource SafeChatTextMuted}"
+                                       HorizontalOptions="End" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </selectors:ChatMessageTemplateSelector.IncomingTemplate>
+
+            <!-- Mensagem enviada -->
+            <selectors:ChatMessageTemplateSelector.OutgoingTemplate>
+                <DataTemplate x:DataType="model:ChatMessage">
+                    <Grid Padding="12,4" ColumnDefinitions="*,Auto">
+                        <Border Grid.Column="0"
+                                BackgroundColor="{StaticResource SafeChatNavy}"
+                                StrokeThickness="0"
+                                Padding="14,10"
+                                MaximumWidthRequest="280"
+                                HorizontalOptions="End"
+                                VerticalOptions="End"
+                                Margin="48,0,0,4">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Content}"
+                                       FontSize="15"
+                                       TextColor="White"
+                                       LineBreakMode="WordWrap" />
+                                <Label Text="{Binding TimestampDisplay}"
+                                       FontSize="11"
+                                       TextColor="#B0C4DE"
+                                       HorizontalOptions="End" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </selectors:ChatMessageTemplateSelector.OutgoingTemplate>
+
+            <!-- Notificação de sistema -->
+            <selectors:ChatMessageTemplateSelector.SystemTemplate>
+                <DataTemplate x:DataType="model:ChatMessage">
+                    <Grid Padding="16,8">
+                        <Border BackgroundColor="{StaticResource SafeChatInfoBg}"
+                                StrokeThickness="0"
+                                Padding="16,8"
+                                HorizontalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding Content}"
+                                   FontSize="13"
+                                   TextColor="{StaticResource SafeChatNavy}"
+                                   HorizontalTextAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </selectors:ChatMessageTemplateSelector.SystemTemplate>
+
+        </selectors:ChatMessageTemplateSelector>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- Cabeçalho do contacto -->
+        <Grid Grid.Row="0"
+              BackgroundColor="{StaticResource SafeChatNavy}"
+              Padding="12,14"
+              ColumnDefinitions="Auto,Auto,*"
+              ColumnSpacing="10">
+            <Button Text="‹"
+                    FontSize="28"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    Padding="0"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    VerticalOptions="Center"
+                    Command="{Binding GoBackCommand}" />
+
+            <Border Grid.Column="1"
+                    WidthRequest="42"
+                    HeightRequest="42"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="21" />
+                </Border.StrokeShape>
+                <Label Text="{Binding ContactInitials}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource SafeChatNavy}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <VerticalStackLayout Grid.Column="2"
+                                 Spacing="2"
+                                 VerticalOptions="Center">
+                <Label Text="{Binding ContactName}"
+                       FontSize="17"
+                       FontAttributes="Bold"
+                       FontFamily="OpenSansSemibold"
+                       TextColor="White" />
+                <HorizontalStackLayout Spacing="6">
+                    <Ellipse WidthRequest="8"
+                             HeightRequest="8"
+                             Fill="{StaticResource SafeChatSuccessGreen}"
+                             VerticalOptions="Center"
+                             IsVisible="{Binding IsOnline}" />
+                    <Label Text="{Binding PresenceText}"
+                           FontSize="13"
+                           TextColor="{Binding IsOnline, Converter={StaticResource OnlinePresenceColorConverter}}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Banner E2EE -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource SafeChatSuccessBg}"
+                StrokeThickness="0"
+                Padding="16,10">
+            <Label Text="As mensagens são encriptadas ponta-a-ponta"
+                   FontSize="13"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource SafeChatSuccessText}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+        </Border>
+
+        <!-- Mensagens -->
+        <Grid Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Messages}"
+                            ItemTemplate="{StaticResource ChatMessageTemplateSelector}"
+                            SelectionMode="None"
+                            Margin="0,8,0,0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource SafeChatNavy}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Entrada de mensagem -->
+        <Border Grid.Row="3"
+                BackgroundColor="White"
+                Stroke="{StaticResource SafeChatDivider}"
+                StrokeThickness="1"
+                Padding="14,12">
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="12">
+                <Border BackgroundColor="White"
+                        Stroke="{StaticResource SafeChatInputBorder}"
+                        StrokeThickness="1"
+                        Padding="16,0"
+                        HeightRequest="48">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Entry Text="{Binding MessageText}"
+                           Placeholder="Escreve uma mensagem..."
+                           PlaceholderColor="{StaticResource SafeChatTextMuted}"
+                           TextColor="{StaticResource SafeChatTextDark}"
+                           BackgroundColor="Transparent"
+                           FontSize="15"
+                           VerticalOptions="Center"
+                           ReturnCommand="{Binding SendMessageCommand}" />
+                </Border>
+
+                <Border Grid.Column="1"
+                        WidthRequest="48"
+                        HeightRequest="48"
+                        BackgroundColor="{StaticResource SafeChatNavy}"
+                        StrokeThickness="0"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SendMessageCommand}" />
+                    </Border.GestureRecognizers>
+                    <Label Text="➤"
+                           FontSize="18"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</ContentPage>
