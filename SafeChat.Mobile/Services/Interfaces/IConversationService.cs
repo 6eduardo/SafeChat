@@ -8,4 +8,8 @@ namespace SafeChat.Mobile.Services.Interfaces;
 public interface IConversationService
 {
   Task<IReadOnlyList<ConversationListItem>> GetConversationsAsync(CancellationToken cancellationToken = default);
+
+  Task<ConversationListItem> CreateConversationAsync(
+    int participantUserId,
+    CancellationToken cancellationToken = default);
 }

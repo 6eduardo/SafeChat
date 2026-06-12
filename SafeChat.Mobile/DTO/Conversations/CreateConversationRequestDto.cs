@@ -5,6 +5,6 @@ namespace SafeChat.Mobile.DTO.Conversations;
 /// </summary>
 public class CreateConversationRequestDto
 {
-    /// <summary>Identificadores dos utilizadores participantes (excluindo o utilizador autenticado).</summary>
-    public List<int> ParticipantUserIds { get; set; } = [];
+    /// <summary>Identificador do outro participante (excluindo o utilizador autenticado).</summary>
+    public int ParticipantUserId { get; set; }
 }

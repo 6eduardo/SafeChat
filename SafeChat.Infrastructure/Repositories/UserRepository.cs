@@ -73,4 +73,27 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+
+    public async Task<IReadOnlyList<User>> SearchAsync(
+        string query,
+        int excludeUserId,
+        int limit,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return [];
+
+        var term = query.Trim();
+
+        return await _context.Users
+            .AsNoTracking()
+            .Include(u => u.PublicKey)
+            .Where(u =>
+                u.Id != excludeUserId &&
+                (EF.Functions.Like(u.Username, $"%{term}%") ||
+                 EF.Functions.Like(u.Email, $"%{term}%")))
+            .OrderBy(u => u.Username)
+            .Take(limit)
+            .ToListAsync(cancellationToken);
+    }
 }

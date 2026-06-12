@@ -16,4 +16,7 @@ public class UserSearchResultDto
 
     /// <summary>Chave pública RSA-2048 em Base64.</summary>
     public string PublicKey { get; set; } = string.Empty;
+
+    /// <summary>Indica se o utilizador está online.</summary>
+    public bool IsOnline { get; set; }
 }

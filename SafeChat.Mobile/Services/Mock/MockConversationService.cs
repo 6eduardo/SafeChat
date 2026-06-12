@@ -79,4 +79,12 @@ public class MockConversationService : IConversationService
       IsSelected = c.IsSelected
     }).ToList();
   }
+
+  public async Task<ConversationListItem> CreateConversationAsync(
+    int participantUserId,
+    CancellationToken cancellationToken = default)
+  {
+    await Task.Delay(200, cancellationToken);
+    return Conversations.First();
+  }
 }

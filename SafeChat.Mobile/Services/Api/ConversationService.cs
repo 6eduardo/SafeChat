@@ -24,6 +24,15 @@ public class ConversationService : BaseApiService, IConversationService
         return summaries.Select(MapToListItem).ToList();
     }
 
+    public async Task<ConversationListItem> CreateConversationAsync(
+        int participantUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var payload = new CreateConversationRequestDto { ParticipantUserId = participantUserId };
+        var summary = await PostAsync<ConversationSummaryDto>("api/conversations", payload, cancellationToken);
+        return MapToListItem(summary);
+    }
+
     private static ConversationListItem MapToListItem(ConversationSummaryDto dto) =>
         new()
         {

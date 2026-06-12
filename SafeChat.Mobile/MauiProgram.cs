@@ -34,6 +34,7 @@ namespace SafeChat.Mobile
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<ConversationsViewModel>();
             builder.Services.AddTransient<ConversationsPage>();
+            builder.Services.AddTransient<ChatsViewModel>();
             builder.Services.AddTransient<ChatsPage>();
             builder.Services.AddTransient<ProfileViewModel>();
             builder.Services.AddTransient<ProfilePage>();
@@ -76,6 +77,13 @@ namespace SafeChat.Mobile
                 client.Timeout = config.RequestTimeout;
             });
             services.AddSingleton<IChatService>(sp => sp.GetRequiredService<ChatService>());
+            services.AddHttpClient<ContactService>((sp, client) =>
+            {
+                var config = sp.GetRequiredService<ApiConfiguration>();
+                client.BaseAddress = new Uri(config.BaseUrl.TrimEnd('/') + "/");
+                client.Timeout = config.RequestTimeout;
+            });
+            services.AddSingleton<IContactService>(sp => sp.GetRequiredService<ContactService>());
             services.AddSingleton<IProfileService, MockProfileService>();
 
             // Armazenamento seguro
@@ -85,9 +93,6 @@ namespace SafeChat.Mobile
             services.AddSingleton<RsaKeyService>();
             services.AddSingleton<AesEncryptionService>();
             services.AddSingleton<MessageEncryptionService>();
-
-            // Comunicação REST (restantes serviços — quando a API estiver pronta)
-            // services.AddHttpClient<ContactService>();
 
             // Navegação MVVM
             services.AddSingleton<NavigationService>();
