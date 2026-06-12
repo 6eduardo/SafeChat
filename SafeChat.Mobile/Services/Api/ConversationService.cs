@@ -42,7 +42,8 @@ public class ConversationService : BaseApiService, IConversationService
             LastMessagePreview = dto.LastMessagePreview,
             TimestampDisplay = FormatTimestamp(dto.LastMessageAt ?? dto.CreatedAt),
             UnreadCount = 0,
-            IsOnline = dto.IsOtherParticipantOnline
+            IsOnline = dto.IsOtherParticipantOnline,
+            OtherParticipantUserId = dto.OtherParticipantUserId
         };
 
     private static string FormatTimestamp(DateTime utc)

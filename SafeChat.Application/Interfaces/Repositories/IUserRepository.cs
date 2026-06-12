@@ -16,4 +16,5 @@ public interface IUserRepository
         int excludeUserId,
         int limit,
         CancellationToken cancellationToken = default);
+    Task<string?> GetPublicKeyValueByUserIdAsync(int userId, CancellationToken cancellationToken = default);
 }

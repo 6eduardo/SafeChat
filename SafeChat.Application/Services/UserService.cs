@@ -1,4 +1,5 @@
 using SafeChat.Application.DTOs.Users;
+using SafeChat.Application.Exceptions;
 using SafeChat.Application.Interfaces.Repositories;
 using SafeChat.Application.Interfaces.Services;
 
@@ -37,5 +38,24 @@ public class UserService : IUserService
             PublicKey = u.PublicKey?.KeyValue ?? string.Empty,
             IsOnline = u.IsOnline
         }).ToList();
+    }
+
+    public async Task<UserPublicKeyDto> GetUserPublicKeyAsync(
+        int userId,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null)
+            throw new ChatException("Utilizador não encontrado.");
+
+        var publicKey = await _userRepository.GetPublicKeyValueByUserIdAsync(userId, cancellationToken);
+        if (string.IsNullOrWhiteSpace(publicKey))
+            throw new ChatException("Chave pública não disponível para este utilizador.");
+
+        return new UserPublicKeyDto
+        {
+            UserId = userId,
+            PublicKey = publicKey
+        };
     }
 }

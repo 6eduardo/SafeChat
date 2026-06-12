@@ -21,6 +21,8 @@ public partial class ConversationListItem : ObservableObject
 
   public bool IsOnline { get; set; }
 
+  public int OtherParticipantUserId { get; set; }
+
   [ObservableProperty]
   private bool _isSelected;
 

@@ -96,4 +96,13 @@ public class UserRepository : IUserRepository
             .Take(limit)
             .ToListAsync(cancellationToken);
     }
+
+    public Task<string?> GetPublicKeyValueByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        return _context.PublicKeys
+            .AsNoTracking()
+            .Where(pk => pk.UserId == userId)
+            .Select(pk => pk.KeyValue)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

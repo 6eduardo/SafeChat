@@ -1,11 +1,14 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SafeChat.Mobile.DTO.Messages;
 using SafeChat.Mobile.DTO.SignalR;
 using SafeChat.Mobile.Model;
 using SafeChat.Mobile.Services.Api;
 using SafeChat.Mobile.Services.Auth;
+using SafeChat.Mobile.Services.Crypto;
 using SafeChat.Mobile.Services.RealTime;
+using SafeChat.Mobile.Services.Storage;
 
 namespace SafeChat.Mobile.ViewModels;
 
@@ -15,7 +18,11 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
   private readonly ChatService _chatService;
   private readonly SignalRService _signalRService;
   private readonly TokenService _tokenService;
+  private readonly MessageEncryptionService _messageEncryptionService;
+  private readonly SecureKeyStorageService _secureKeyStorageService;
   private int _parsedConversationId;
+  private int _recipientUserId;
+  private int _optimisticMessageId = -1;
 
   [ObservableProperty]
   private string _conversationId = string.Empty;
@@ -40,11 +47,18 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
 
   public ObservableCollection<ChatMessage> Messages { get; } = [];
 
-  public ChatViewModel(ChatService chatService, SignalRService signalRService, TokenService tokenService)
+  public ChatViewModel(
+    ChatService chatService,
+    SignalRService signalRService,
+    TokenService tokenService,
+    MessageEncryptionService messageEncryptionService,
+    SecureKeyStorageService secureKeyStorageService)
   {
     _chatService = chatService;
     _signalRService = signalRService;
     _tokenService = tokenService;
+    _messageEncryptionService = messageEncryptionService;
+    _secureKeyStorageService = secureKeyStorageService;
     _signalRService.MessageReceived += OnMessageReceived;
   }
 
@@ -68,6 +82,7 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
       if (conversation is null)
         return;
 
+      _recipientUserId = conversation.OtherParticipantUserId;
       ContactName = conversation.DisplayName;
       ContactInitials = conversation.Initials;
       IsOnline = conversation.IsOnline;
@@ -99,21 +114,39 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
     if (string.IsNullOrWhiteSpace(MessageText))
       return;
 
+    if (_recipientUserId <= 0)
+    {
+      await Shell.Current.DisplayAlertAsync("Erro", "Destinatário da conversa não identificado.", "OK");
+      return;
+    }
+
     var text = MessageText.Trim();
     MessageText = string.Empty;
 
     try
     {
-      var (encryptedContent, encryptedAesKey, aesIv) = ChatService.EncodePayload(text);
+      var recipientPublicKey = await _chatService.GetUserPublicKeyAsync(_recipientUserId);
+      var payload = _messageEncryptionService.EncryptMessage(text, recipientPublicKey);
+
+      var optimisticMessage = _chatService.BuildOutgoingMessage(
+        text,
+        _parsedConversationId,
+        _optimisticMessageId--);
+      Messages.Add(optimisticMessage);
+
       await _signalRService.SendMessageAsync(
         _parsedConversationId,
-        encryptedContent,
-        encryptedAesKey,
-        aesIv);
+        payload.EncryptedContent,
+        payload.EncryptedAesKey,
+        payload.AesIv);
     }
     catch (Exception ex)
     {
       MessageText = text;
+      var last = Messages.LastOrDefault(m => m.Id < 0 && m.Content == text);
+      if (last is not null)
+        Messages.Remove(last);
+
       await Shell.Current.DisplayAlertAsync("Erro", ex.Message, "OK");
     }
   }
@@ -123,8 +156,52 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
     if (notification.ConversationId != _parsedConversationId)
       return;
 
+    _ = HandleIncomingMessageAsync(notification);
+  }
+
+  private async Task HandleIncomingMessageAsync(NewMessageNotificationDto notification)
+  {
     var currentUserId = _tokenService.GetSession()?.UserId ?? 0;
-    var chatMessage = _chatService.MapToChatMessage(notification.Message, currentUserId);
+
+    if (notification.Message.SenderId == currentUserId)
+    {
+      MainThread.BeginInvokeOnMainThread(() =>
+      {
+        if (Messages.Any(m => m.Id == notification.Message.Id))
+          return;
+
+        var optimistic = Messages.LastOrDefault(m => m.Id < 0 && m.Kind == ChatMessageKind.Outgoing);
+        if (optimistic is not null)
+        {
+          optimistic.Id = notification.Message.Id;
+          optimistic.SentAt = notification.Message.SentAt;
+          optimistic.TimestampDisplay = notification.Message.SentAt.ToLocalTime().ToString("HH:mm");
+          return;
+        }
+      });
+
+      return;
+    }
+
+    var privateKey = await _secureKeyStorageService.GetPrivateKeyAsync();
+    if (string.IsNullOrEmpty(privateKey))
+      return;
+
+    ChatMessage chatMessage;
+    try
+    {
+      var plaintext = _messageEncryptionService.DecryptMessage(
+        notification.Message.EncryptedContent,
+        notification.Message.EncryptedAesKey,
+        notification.Message.AesIv,
+        privateKey);
+
+      chatMessage = BuildIncomingChatMessage(notification.Message, plaintext);
+    }
+    catch
+    {
+      chatMessage = BuildIncomingChatMessage(notification.Message, "Não foi possível desencriptar");
+    }
 
     MainThread.BeginInvokeOnMainThread(() =>
     {
@@ -133,6 +210,37 @@ public partial class ChatViewModel : BaseViewModel, IDisposable
 
       Messages.Add(chatMessage);
     });
+  }
+
+  private static ChatMessage BuildIncomingChatMessage(MessageDto dto, string content)
+  {
+    var initials = GetInitials(dto.SenderUsername);
+
+    return new ChatMessage
+    {
+      Id = dto.Id,
+      ConversationId = dto.ConversationId,
+      SenderId = dto.SenderId,
+      SenderUsername = dto.SenderUsername,
+      SenderInitials = initials,
+      Kind = ChatMessageKind.Incoming,
+      Content = content,
+      SentAt = dto.SentAt,
+      TimestampDisplay = dto.SentAt.ToLocalTime().ToString("HH:mm")
+    };
+  }
+
+  private static string GetInitials(string username)
+  {
+    if (string.IsNullOrWhiteSpace(username))
+      return "??";
+
+    var parts = username.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    return parts.Length >= 2
+      ? $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant()
+      : username.Length >= 2
+        ? username[..2].ToUpperInvariant()
+        : username.ToUpperInvariant();
   }
 
   public void Dispose()

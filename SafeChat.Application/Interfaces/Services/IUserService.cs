@@ -8,4 +8,8 @@ public interface IUserService
         int currentUserId,
         string query,
         CancellationToken cancellationToken = default);
+
+    Task<UserPublicKeyDto> GetUserPublicKeyAsync(
+        int userId,
+        CancellationToken cancellationToken = default);
 }

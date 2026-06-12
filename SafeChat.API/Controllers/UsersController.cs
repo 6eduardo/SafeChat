@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SafeChat.Application.DTOs.Users;
+using SafeChat.Application.Exceptions;
 using SafeChat.Application.Interfaces.Services;
 
 namespace SafeChat.API.Controllers;
@@ -25,6 +26,22 @@ public class UsersController : ControllerBase
     {
         var results = await _userService.SearchUsersAsync(GetCurrentUserId(), q, cancellationToken);
         return Ok(results);
+    }
+
+    [HttpGet("{userId:int}/publickey")]
+    [ProducesResponseType(typeof(UserPublicKeyDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetPublicKey(int userId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var publicKey = await _userService.GetUserPublicKeyAsync(userId, cancellationToken);
+            return Ok(publicKey);
+        }
+        catch (ChatException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     private int GetCurrentUserId()
